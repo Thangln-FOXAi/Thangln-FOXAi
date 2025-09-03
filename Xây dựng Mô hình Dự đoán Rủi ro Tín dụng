@@ -1,1 +1,49 @@
-
+Phần 1: Mô tả bài toán - "Xây dựng Mô hình Dự đoán Rủi ro Tín dụng"
+Đây là một bài toán kinh điển và rất quan trọng trong ngành tài chính - ngân hàng.
+Mục tiêu: Xây dựng một hệ thống thông minh có khả năng tự động phân loại một khách hàng mới hoặc hiện tại vào một trong hai nhóm: "Rủi ro Thấp" hoặc "Rủi ro Cao" dựa trên các thông tin về hành vi và lịch sử tài chính của họ.
+Dữ liệu đầu vào (Đặc trưng - Features): Là những thông tin chúng ta biết về khách hàng, ví dụ:
+Diem_Tin_Dung: Điểm tín dụng CIC.
+Tinh_Trang_No: Tình trạng nợ hiện tại (nợ xấu, nợ quá hạn...).
+Lich_Su_Thanh_Toan: Lịch sử trả nợ trong quá khứ.
+Ty_Le_DTI: Tỷ lệ nợ trên thu nhập.
+GD_Lon_Bat_Thuong: Có giao dịch lớn bất thường không.
+Su_Dung_Kenh_Bat_Thuong: Có sử dụng kênh giao dịch bất thường không.
+Kết quả đầu ra (Nhãn - Label): Là dự đoán mà mô hình cần đưa ra, trong trường hợp này là cột Nhan_Rui_Ro (Thấp hoặc Cao).
+Loại bài toán: Trong lĩnh vực Học máy (Machine Learning), đây được gọi là một bài toán phân loại nhị phân (Binary Classification), vì mục tiêu là phân loại đối tượng (khách hàng) vào một trong hai lớp có sẵn.
+Phần 2: Ý nghĩa và Giá trị Thực tiễn
+Việc xây dựng thành công mô hình này mang lại giá trị to lớn cho cả tổ chức tài chính và khách hàng:
+Đối với Tổ chức Tài chính (Ngân hàng, Công ty cho vay):
+Giảm thiểu Rủi ro & Tổn thất: Đây là ý nghĩa quan trọng nhất. Bằng cách xác định sớm các khách hàng có khả năng không trả được nợ, tổ chức có thể từ chối cho vay hoặc đưa ra các điều kiện chặt chẽ hơn, từ đó giảm thiểu đáng kể tổn thất tài chính do nợ xấu.
+Tăng tốc độ và Hiệu quả: Thay vì để nhân viên tín dụng phải phân tích thủ công từng hồ sơ (việc có thể mất nhiều giờ hoặc nhiều ngày), mô hình có thể đưa ra dự đoán chỉ trong vài giây. Điều này giúp đẩy nhanh quá trình phê duyệt khoản vay.
+Ra quyết định Nhất quán và Khách quan: Mô hình luôn áp dụng cùng một bộ quy tắc dựa trên dữ liệu cho mọi khách hàng, giúp loại bỏ các yếu tố cảm tính, thiên vị có thể xảy ra trong quá trình đánh giá thủ công.
+Tối ưu hóa Nguồn lực: Giải phóng nhân viên tín dụng khỏi các tác vụ lặp đi lặp lại, cho phép họ tập trung vào các hồ sơ phức tạp, chăm sóc khách hàng hoặc các nhiệm vụ có giá trị cao hơn.
+Đối với Khách hàng:
+Trải nghiệm Tốt hơn: Khách hàng nhận được kết quả phê duyệt khoản vay nhanh chóng hơn rất nhiều.
+Tiếp cận Công bằng: Quyết định được đưa ra dựa trên dữ liệu lịch sử, đảm bảo một quy trình đánh giá công bằng và minh bạch hơn.
+Phần 3: Tóm tắt Các bước Thực hiện
+Đây là quy trình chuẩn mà chúng ta đã đi qua trong Google Colab để giải quyết bài toán này:
+Bước 1: Chuẩn bị Dữ liệu
+Công việc: Đọc file dữ liệu credit_data.xlsx vào môi trường làm việc.
+Mục tiêu: Đảm bảo dữ liệu được nạp thành công, không lỗi và sẵn sàng cho các bước tiếp theo. Đây là bước nền tảng quan trọng nhất.
+Bước 2: Tiền xử lý Dữ liệu
+Công việc: "Dịch" dữ liệu từ dạng con người đọc (chữ, số ở nhiều thang đo khác nhau) sang dạng máy tính có thể "học" được (chỉ gồm các con số đã được chuẩn hóa).
+Các hành động chính:
+Mã hóa Dữ liệu dạng chữ (Encoding): Chuyển đổi các cột có giá trị chữ như Tinh_Trang_No (ví dụ: "Không nợ xấu", "Nợ quá hạn") thành các cột số 0 và 1.
+Chuẩn hóa Dữ liệu dạng số (Scaling): Đưa các cột số như Diem_Tin_Dung (giá trị hàng trăm) và Ty_Le_DTI (giá trị dưới 1) về cùng một thang đo. Điều này giúp mô hình không bị "thiên vị" bởi các cột có giá trị lớn.
+Bước 3: Xây dựng và Huấn luyện Mô hình
+Công việc: Xây dựng "bộ não" và dạy cho nó cách phân biệt giữa khách hàng rủi ro cao và thấp.
+Các hành động chính:
+Lựa chọn Thuật toán: Chúng ta đã chọn XGBoost, một thuật toán rất mạnh mẽ và hiệu quả, thường cho độ chính xác cao.
+Phân chia Dữ liệu: Chia toàn bộ dữ liệu thành 2 phần:
+Tập huấn luyện (Training set - 70%): Dùng để "dạy" cho mô hình.
+Tập kiểm tra (Testing set - 30%): Dùng để "kiểm tra" xem mô hình học tốt đến đâu trên những dữ liệu nó chưa từng thấy.
+Huấn luyện (Fitting): Cung cấp tập huấn luyện cho mô hình XGBoost. Ở bước này, mô hình sẽ tự động tìm ra các quy luật và mối liên hệ ẩn trong dữ liệu.
+Bước 4: Đánh giá Mô hình
+Công việc: Đo lường hiệu suất của mô hình sau khi đã được huấn luyện.
+Các hành động chính:
+Dự đoán trên Tập kiểm tra: Yêu cầu mô hình đưa ra dự đoán cho 30% dữ liệu mà nó chưa từng thấy.
+Phân tích Kết quả: So sánh dự đoán của mô hình với kết quả thực tế và tính toán các chỉ số, cũng như vẽ các biểu đồ:
+Độ chính xác (Accuracy): Tỷ lệ dự đoán đúng là bao nhiêu?
+Ma trận nhầm lẫn: Cho thấy cụ thể mô hình nhầm lẫn ở đâu (ví dụ: có bao nhiêu khách hàng "Rủi ro Cao" bị dự đoán nhầm thành "Thấp"?).
+Đường cong ROC & AUC: Một chỉ số tổng quan cho thấy khả năng phân biệt hai lớp của mô hình tốt như thế nào (AUC càng gần 1 càng tốt).
+Mức độ quan trọng của Đặc trưng: Biểu đồ này cho chúng ta biết yếu tố nào có ảnh hưởng lớn nhất đến quyết định của mô hình, mang lại giá trị phân tích kinh doanh rất cao.
